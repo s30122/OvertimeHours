@@ -13,28 +13,53 @@ public class OvertimeTests
     {
         _year = "2023";
         _month = "10";
-        _day = "09";
+        _day = "08";
     }
 
     [Fact]
     public void day_overlap_1_period()
     {
-        var dayOverTimePeriod = OverTimePeriod("06:00", "22:00");
-        var nightOverTimePeriod = OverTimePeriod("22:00", "06:00");
+        var dayOverTimePeriod = new Period("06:00", "22:00");
+        var nightOverTimePeriod = new Period("22:00", "06:00");
+        
+        var settingPeriods = new OvertimePeriodSettings
+        {
+            dayOverTimePeriod,
+            nightOverTimePeriod
+        };
 
-        var settingPeriods = new List<Period> { dayOverTimePeriod, nightOverTimePeriod };
+        var overTimePeriod = new Period(new DateTime(2023, 10, 08, 18, 00, 00),
+                                        new DateTime(2023, 10, 08, 20, 00, 00));
 
-        var overTimePeriod = OverTimePeriod("18:00", "20:00");
         var result = SplitOvertimePeriod(settingPeriods, overTimePeriod).ToList();
-
-        result.Count.Should().Be(1);
-
-        var overlap = result[0];
-        overlap.Start.Should().Be(ConvertTimeToDateTime("18:00"));
-        overlap.End.Should().Be(ConvertTimeToDateTime("20:00"));
+        
+        result.Should().BeEquivalentTo(new List<Period>
+        {
+            OverTimePeriod("18:00", "20:00"),
+        });
     }
 
-    private IEnumerable<Period> SplitOvertimePeriod(List<Period> settingPeriods, Period overTimePeriod)
+    [Fact(Skip = "skip")]
+    public void day_overlap_2_period()
+    {
+        // var dayOverTimePeriod = OverTimePeriod("06:00", "22:00");
+        // var nightOverTimePeriod = OverTimePeriod("22:00", "06:00");
+        //
+        // var settingPeriods = new List<Period> { dayOverTimePeriod, nightOverTimePeriod };
+        //
+        // var overTimePeriod = OverTimePeriod("20:00", "23:00");
+        // var result = SplitOvertimePeriod(settingPeriods, overTimePeriod).ToList();
+        //
+        // result.Count.Should().Be(2);
+        //
+        // result.Should().BeEquivalentTo(new List<Period>
+        // {
+        //     OverTimePeriod("20:00", "22:00"),
+        //     OverTimePeriod("22:00", "23:00"),
+        // });
+    }
+
+    private IEnumerable<Period> SplitOvertimePeriod(OvertimePeriodSettings settingPeriods, Period overTimePeriod)
     {
         foreach (var settingPeriod in settingPeriods)
         {

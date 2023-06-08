@@ -1,33 +1,48 @@
+using System.Globalization;
+
 namespace OvertimeHour;
 
 public class Period
 {
-    public Period(DateTime start, DateTime end)
+    public Period(DateTime startDateTime, DateTime endDateTime)
     {
-        Start = start;
-        End = end;
+        StartDateTime = startDateTime;
+        EndDateTime = endDateTime;
     }
 
-    public DateTime Start { get; }
-
-    public DateTime End { get; }
-
-    private bool IsTimeOverlap(Period another)
+    public Period(string start, string end)
     {
-        return Start.TimeOfDay < another.End.TimeOfDay && another.Start.TimeOfDay < End.TimeOfDay;
+        StartDateTime = DateTime.ParseExact($"{start}", "HH:mm", new DateTimeFormatInfo());
+        EndDateTime = DateTime.ParseExact($"{end}", "HH:mm", new DateTimeFormatInfo());
+        
+        StartTimeSpan = TimeSpan.Parse(start);
+        EndTimeSpan = TimeSpan.Parse(end);
     }
+
+    public TimeSpan EndTimeSpan { get; }
+
+    public TimeSpan StartTimeSpan { get; }
+
+    public DateTime StartDateTime { get; }
+
+    public DateTime EndDateTime { get; }
 
     public Period Overlap(Period another)
     {
         if (IsTimeOverlap(another))
         {
-            var start = Start.TimeOfDay > another.Start.TimeOfDay ? Start : another.Start;
+            var start = StartDateTime.TimeOfDay > another.StartDateTime.TimeOfDay ? StartDateTime : another.StartDateTime;
 
-            var end = End.TimeOfDay < another.End.TimeOfDay ? End : another.End;
+            var end = EndDateTime.TimeOfDay < another.EndDateTime.TimeOfDay ? EndDateTime : another.EndDateTime;
 
             return new Period(start, end);
         }
 
         return default;
+    }
+
+    private bool IsTimeOverlap(Period another)
+    {
+        return StartDateTime.TimeOfDay < another.EndDateTime.TimeOfDay && another.StartDateTime.TimeOfDay < EndDateTime.TimeOfDay;
     }
 }
