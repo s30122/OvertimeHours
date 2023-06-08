@@ -8,6 +8,9 @@ public class Period
     {
         StartDateTime = startDateTime;
         EndDateTime = endDateTime;
+
+        StartTimeSpan = TimeSpan.Parse(startDateTime.ToString("HH:mm"));
+        EndTimeSpan = TimeSpan.Parse(endDateTime.ToString("HH:mm"));
     }
 
     public Period(string start, string end)
@@ -31,9 +34,8 @@ public class Period
     {
         if (IsTimeOverlap(another))
         {
-            var start = StartDateTime.TimeOfDay > another.StartDateTime.TimeOfDay ? StartDateTime : another.StartDateTime;
-
-            var end = EndDateTime.TimeOfDay < another.EndDateTime.TimeOfDay ? EndDateTime : another.EndDateTime;
+            var start = StartTimeSpan > another.StartTimeSpan ? StartDateTime : another.StartDateTime;
+            var end = EndTimeSpan < another.EndTimeSpan ? EndDateTime : another.EndDateTime;
 
             return new Period(start, end);
         }
@@ -43,6 +45,6 @@ public class Period
 
     private bool IsTimeOverlap(Period another)
     {
-        return StartDateTime.TimeOfDay < another.EndDateTime.TimeOfDay && another.StartDateTime.TimeOfDay < EndDateTime.TimeOfDay;
+        return StartTimeSpan < another.EndTimeSpan && another.StartTimeSpan < EndTimeSpan;
     }
 }
