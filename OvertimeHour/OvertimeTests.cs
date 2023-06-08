@@ -17,55 +17,42 @@ public class OvertimeTests
     }
 
     [Fact]
-    public void First()
+    public void day_overlap_1_period()
     {
-        var dayOverTimeStartSetting = "06:00";
-        var dayOverTimeEndSetting = "22:00";
-        var dayOverTimeRateSetting = 150;
+        var dayOverTimePeriod = OverTimePeriod("06:00", "22:00");
+        var nightOverTimePeriod = OverTimePeriod("22:00", "06:00");
 
-        var dayOverTimePeriod = OverTimeSettingPeriod(dayOverTimeStartSetting, dayOverTimeEndSetting, dayOverTimeRateSetting);
-
-        var nightOverTimeStartSetting = "22:00";
-        var nightOverTimeEndSetting = "06:00";
-        var nightOverTimeDayNotOvertimeRateSetting = 200;
-        var nightOverTimeDayHaveOvertimeRateSetting = 210;
-
-        var nightOverTimePeriod = NightOverTimePeriod(nightOverTimeStartSetting, nightOverTimeEndSetting, nightOverTimeDayNotOvertimeRateSetting, nightOverTimeDayHaveOvertimeRateSetting);
+        var settingPeriods = new List<Period> { dayOverTimePeriod, nightOverTimePeriod };
 
         var overTimePeriod = OverTimePeriod("18:00", "20:00");
+        var result = SplitOvertimePeriod(settingPeriods, overTimePeriod).ToList();
 
-        var overlap = overTimePeriod.Overlap(dayOverTimePeriod);
+        result.Count.Should().Be(1);
+
+        var overlap = result[0];
         overlap.Start.Should().Be(ConvertTimeToDateTime("18:00"));
         overlap.End.Should().Be(ConvertTimeToDateTime("20:00"));
-
-        overTimePeriod.Overlap(nightOverTimePeriod).Should().BeNull();
     }
 
-    private OverTimeSettingPeriod OverTimePeriod(string start, string end)
+    private IEnumerable<Period> SplitOvertimePeriod(List<Period> settingPeriods, Period overTimePeriod)
+    {
+        foreach (var settingPeriod in settingPeriods)
+        {
+            var overTimeSettingPeriod = settingPeriod.Overlap(overTimePeriod);
+
+            if (overTimeSettingPeriod != null)
+            {
+                yield return overTimeSettingPeriod;
+            }
+        }
+    }
+
+    private Period OverTimePeriod(string start, string end)
     {
         var overtimeStart = ConvertTimeToDateTime(start);
         var overtimeEnd = ConvertTimeToDateTime(end);
 
-        return new OverTimeSettingPeriod(overtimeStart, overtimeEnd);
-    }
-
-    private OverTimeSettingPeriod NightOverTimePeriod(string nightOverTimeStartSetting,
-                                                      string nightOverTimeEndSetting,
-                                                      int nightOverTimeDayNotOvertimeRateSetting,
-                                                      int nightOverTimeDayHaveOvertimeRateSetting)
-    {
-        var nightOverTimeStart = ConvertTimeToDateTime(nightOverTimeStartSetting);
-        var nightOverTimeEnd = ConvertTimeToDateTime(nightOverTimeEndSetting);
-
-        return new OverTimeSettingPeriod(nightOverTimeStart, nightOverTimeEnd, nightOverTimeDayNotOvertimeRateSetting, nightOverTimeDayHaveOvertimeRateSetting);
-    }
-
-    private OverTimeSettingPeriod OverTimeSettingPeriod(string dayOverTimeStartSetting, string dayOverTimeEndSetting, int dayOverTimeRateSetting)
-    {
-        var dayOverTimeStart = ConvertTimeToDateTime(dayOverTimeStartSetting);
-        var dayOverTimeEnd = ConvertTimeToDateTime(dayOverTimeEndSetting);
-
-        return new OverTimeSettingPeriod(dayOverTimeStart, dayOverTimeEnd, dayOverTimeRateSetting);
+        return new Period(overtimeStart, overtimeEnd);
     }
 
     private DateTime ConvertTimeToDateTime(string dayOverTimeSettingStart)
