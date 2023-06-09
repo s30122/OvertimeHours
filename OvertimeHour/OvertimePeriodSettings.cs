@@ -6,8 +6,7 @@ public class OvertimePeriodSettings : List<Period>
     {
         foreach (var period in periods)
         {
-            // cross day
-            if (period.EndTimeSpan <= period.StartTimeSpan)
+            if (period.IsCrossDay)
             {
                 Add(new Period(period.StartTimeSpan, TimeSpan.Zero));
                 Add(new Period(TimeSpan.Zero, period.EndTimeSpan));

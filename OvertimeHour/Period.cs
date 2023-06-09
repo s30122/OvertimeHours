@@ -17,7 +17,7 @@ public class Period
     {
         StartDateTime = DateTime.ParseExact($"{start}", "HH:mm", new DateTimeFormatInfo());
         EndDateTime = DateTime.ParseExact($"{end}", "HH:mm", new DateTimeFormatInfo());
-        
+
         StartTimeSpan = TimeSpan.Parse(start);
         EndTimeSpan = TimeSpan.Parse(end);
     }
@@ -38,6 +38,8 @@ public class Period
     public DateTime StartDateTime { get; }
 
     public DateTime EndDateTime { get; }
+
+    public bool IsCrossDay => EndTimeSpan <= StartTimeSpan;
 
     public Period Overlap(Period another)
     {
