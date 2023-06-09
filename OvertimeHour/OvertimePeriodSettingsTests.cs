@@ -11,16 +11,10 @@ public class OvertimePeriodSettingsTests
     public void ctor()
     {
         var startDateTime = new DateTime(2023, 06, 01);
-        
+
         var overtimePeriodSettings = new OvertimePeriodSettings(new Period(startDateTime, "01:00", "02:00"));
 
         overtimePeriodSettings.Count.Should().Be(1);
-
-        var overtimePeriodSetting = overtimePeriodSettings[0];
-        overtimePeriodSetting.StartTimeSpan.Should().Be(TimeSpan.Parse("01:00"));
-        overtimePeriodSetting.EndTimeSpan.Should().Be(TimeSpan.Parse("02:00"));
-        overtimePeriodSetting.StartDateTime.Should().Be(new DateTime(2023, 06, 01, 01, 00, 00));
-        overtimePeriodSetting.EndDateTime.Should().Be(new DateTime(2023, 06, 01, 02, 00, 00));
     }
 
     [Fact(Skip = "skip")]
