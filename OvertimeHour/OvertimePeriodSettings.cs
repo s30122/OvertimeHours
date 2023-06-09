@@ -6,7 +6,16 @@ public class OvertimePeriodSettings : List<Period>
     {
         foreach (var period in periods)
         {
-            Add(period);
+            // cross day
+            if (period.EndTimeSpan <= period.StartTimeSpan)
+            {
+                Add(new Period(period.StartTimeSpan, TimeSpan.Zero));
+                Add(new Period(TimeSpan.Zero, period.EndTimeSpan));
+            }
+            else
+            {
+                Add(period);
+            }
         }
     }
 

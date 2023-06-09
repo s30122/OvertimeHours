@@ -22,6 +22,15 @@ public class Period
         EndTimeSpan = TimeSpan.Parse(end);
     }
 
+    public Period(TimeSpan start, TimeSpan end)
+    {
+        StartDateTime = DateTime.ParseExact($"{start.Hours:00}:{start.Minutes:00}", "HH:mm", new DateTimeFormatInfo());
+        EndDateTime = DateTime.ParseExact($"{end.Hours:00}:{end.Minutes:00}", "HH:mm", new DateTimeFormatInfo());
+
+        StartTimeSpan = start;
+        EndTimeSpan = end;
+    }
+
     public TimeSpan EndTimeSpan { get; }
 
     public TimeSpan StartTimeSpan { get; }
