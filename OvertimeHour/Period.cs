@@ -13,10 +13,19 @@ public class Period
         EndTimeSpan = TimeSpan.Parse(endDateTime.ToString("HH:mm"));
     }
 
+    public Period(DateTime overtimeStartDateTime, string start, string end)
+    {
+        StartDateTime = DateTime.ParseExact($"{overtimeStartDateTime:yyyy/MM/dd} {start}", "yyyy/MM/dd HH:mm", new DateTimeFormatInfo());
+        EndDateTime = DateTime.ParseExact($"{overtimeStartDateTime:yyyy/MM/dd} {end}", "yyyy/MM/dd HH:mm", new DateTimeFormatInfo());
+
+        StartTimeSpan = TimeSpan.Parse(start);
+        EndTimeSpan = TimeSpan.Parse(end);
+    }
+    
     public Period(string start, string end)
     {
-        StartDateTime = DateTime.ParseExact($"2023/06/01 {start}", "yyyy/MM/dd HH:mm", new DateTimeFormatInfo());
-        EndDateTime = DateTime.ParseExact($"2023/06/01 {end}", "yyyy/MM/dd HH:mm", new DateTimeFormatInfo());
+        StartDateTime = DateTime.ParseExact($"{start}", "HH:mm", new DateTimeFormatInfo());
+        EndDateTime = DateTime.ParseExact($"{end}", "HH:mm", new DateTimeFormatInfo());
 
         StartTimeSpan = TimeSpan.Parse(start);
         EndTimeSpan = TimeSpan.Parse(end);

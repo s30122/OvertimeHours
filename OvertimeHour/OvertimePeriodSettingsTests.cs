@@ -10,9 +10,9 @@ public class OvertimePeriodSettingsTests
     [Fact]
     public void ctor()
     {
-        var overtimeFormStartDateTime = new DateTime(2023, 06, 01);
+        var startDateTime = new DateTime(2023, 06, 01);
         
-        var overtimePeriodSettings = new OvertimePeriodSettings(new Period("01:00", "02:00"));
+        var overtimePeriodSettings = new OvertimePeriodSettings(new Period(startDateTime, "01:00", "02:00"));
 
         overtimePeriodSettings.Count.Should().Be(1);
 
