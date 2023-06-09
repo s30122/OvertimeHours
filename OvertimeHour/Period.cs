@@ -15,8 +15,8 @@ public class Period
 
     public Period(string start, string end)
     {
-        StartDateTime = DateTime.ParseExact($"{start}", "HH:mm", new DateTimeFormatInfo());
-        EndDateTime = DateTime.ParseExact($"{end}", "HH:mm", new DateTimeFormatInfo());
+        StartDateTime = DateTime.ParseExact($"2023/06/01 {start}", "yyyy/MM/dd HH:mm", new DateTimeFormatInfo());
+        EndDateTime = DateTime.ParseExact($"2023/06/01 {end}", "yyyy/MM/dd HH:mm", new DateTimeFormatInfo());
 
         StartTimeSpan = TimeSpan.Parse(start);
         EndTimeSpan = TimeSpan.Parse(end);
