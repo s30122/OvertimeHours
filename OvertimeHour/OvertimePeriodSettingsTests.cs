@@ -1,11 +1,14 @@
+using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 
 namespace OvertimeHour;
 
+[SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
+[SuppressMessage("ReSharper", "InconsistentNaming")]
 public class OvertimePeriodSettingsTests
 {
     [Fact]
-    public void Ctor()
+    public void ctor()
     {
         new OvertimePeriodSettings(new Period("01:00", "02:00"),
                                    new Period("02:00", "03:00"))
@@ -13,7 +16,7 @@ public class OvertimePeriodSettingsTests
     }
 
     [Fact]
-    public void Ctor_split_cross_day()
+    public void ctor_split_cross_day()
     {
         var overtimePeriodSettings = new OvertimePeriodSettings(new Period("23:00", "02:00"));
 
