@@ -35,4 +35,79 @@ public class PeriodTests
         period.Start.Should().Be(new DateTime(2023, 06, 01, 00, 00, 00));
         period.End.Should().Be(new DateTime(2023, 06, 01, 01, 00, 00));
     }
+
+    [Fact]
+    public void overlap_period_start()
+    {
+        var baseDate = new DateTime(2023, 06, 01);
+        var period = new Period(baseDate, "05:00", "07:00");
+
+        var overlapPeriod = period.OverlapPeriod(new Period(baseDate, "04:00", "06:00"));
+
+        overlapPeriod.Start.Should().Be(new DateTime(2023, 06, 01, 05, 00, 00));
+    }
+
+    [Fact]
+    public void overlap_period_end()
+    {
+        var baseDate = new DateTime(2023, 06, 01);
+        var period = new Period(baseDate, "05:00", "07:00");
+
+        var overlapPeriod = period.OverlapPeriod(new Period(baseDate, "06:00", "08:00"));
+
+        overlapPeriod.Start.Should().Be(new DateTime(2023, 06, 01, 06, 00, 00));
+        overlapPeriod.End.Should().Be(new DateTime(2023, 06, 01, 07, 00, 00));
+    }
+
+    [Fact]
+    public void overlap_period_cross()
+    {
+        var baseDate = new DateTime(2023, 06, 01);
+        var period = new Period(baseDate, "05:00", "07:00");
+
+        var overlapPeriod = period.OverlapPeriod(new Period(baseDate, "04:00", "08:00"));
+
+        overlapPeriod.Start.Should().Be(new DateTime(2023, 06, 01, 05, 00, 00));
+        overlapPeriod.End.Should().Be(new DateTime(2023, 06, 01, 07, 00, 00));
+    }
+
+    [Fact]
+    public void overlap_period_before_no_cross()
+    {
+        var baseDate = new DateTime(2023, 06, 01);
+        var period = new Period(baseDate, "05:00", "07:00");
+
+        var overlapPeriod = period.OverlapPeriod(new Period(baseDate, "04:00", "05:00"));
+
+        overlapPeriod.Should().BeNull();
+    }
+
+    [Fact]
+    public void overlap_period_after_no_cross()
+    {
+        var baseDate = new DateTime(2023, 06, 01);
+        var period = new Period(baseDate, "05:00", "07:00");
+
+        var overlapPeriod = period.OverlapPeriod(new Period(baseDate, "07:00", "08:00"));
+
+        overlapPeriod.Should().BeNull();
+    }
+
+    [Fact]
+    public void isCross_day_end_is_0001()
+    {
+        var baseDate = new DateTime(2023, 06, 01);
+        var period = new Period(baseDate, "23:00", "00:01");
+
+        period.IsCrossDay.Should().BeTrue();
+    }
+
+    [Fact]
+    public void isCross_day_end_is_0000()
+    {
+        var baseDate = new DateTime(2023, 06, 01);
+        var period = new Period(baseDate, "23:00", "00:00");
+
+        period.IsCrossDay.Should().BeFalse();
+    }
 }

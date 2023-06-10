@@ -28,17 +28,17 @@ public class Period
 
     public bool IsCrossDay => End <= Start;
 
-    public Period Overlap(Period another)
+    public Period OverlapPeriod(Period another)
     {
-        if (IsTimeOverlap(another))
+        if (IsTimeOverlap(another) == false)
         {
-            var start = Start > another.Start ? OriginStart : another.OriginStart;
-            var end = End < another.End ? OriginEnd : another.OriginEnd;
-
-            return new Period(BaseDate, start, end);
+            return default;
         }
 
-        return default;
+        var start = Start > another.Start ? OriginStart : another.OriginStart;
+        var end = End < another.End ? OriginEnd : another.OriginEnd;
+
+        return new Period(BaseDate, start, end);
     }
 
     private static DateTime DateTimeParseExact(DateTime date, string start)

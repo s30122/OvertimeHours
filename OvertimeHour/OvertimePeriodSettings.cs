@@ -22,7 +22,7 @@ public class OvertimePeriodSettings : List<Period>
     {
         foreach (var settingPeriod in this)
         {
-            var overTimeSettingPeriod = settingPeriod.Overlap(overTimePeriod);
+            var overTimeSettingPeriod = settingPeriod.OverlapPeriod(overTimePeriod);
 
             if (overTimeSettingPeriod != null)
             {
