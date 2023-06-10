@@ -4,37 +4,26 @@ namespace OvertimeHour;
 
 public class Period
 {
-    public Period(DateTime startDateTime, DateTime endDateTime)
+    public Period(DateTime baseDate, string start, string end)
     {
-        StartDateTime = startDateTime;
-        EndDateTime = endDateTime;
+        BaseDate = baseDate;
+        OriginStartString = start;
+        OriginEndString = end;
 
-        StartTimeSpan = TimeSpan.Parse(startDateTime.ToString("HH:mm"));
-        EndTimeSpan = TimeSpan.Parse(endDateTime.ToString("HH:mm"));
-    }
+        StartDateTime = DateTimeParseExact(baseDate, start);
 
-    public Period(DateTime overtimeStartDateTime, string start, string end)
-    {
-        StartDateTime = DateTime.ParseExact($"{overtimeStartDateTime:yyyy/MM/dd} {start}", "yyyy/MM/dd HH:mm", new DateTimeFormatInfo());
-        EndDateTime = DateTime.ParseExact($"{overtimeStartDateTime:yyyy/MM/dd} {end}", "yyyy/MM/dd HH:mm", new DateTimeFormatInfo());
+        var endDate = end == "00:00" ? baseDate.AddDays(1) : baseDate;
+        EndDateTime = DateTimeParseExact(endDate, end);
 
         StartTimeSpan = TimeSpan.Parse(start);
         EndTimeSpan = TimeSpan.Parse(end);
     }
 
-    public Period(string start, string end)
-        : this(DateTime.UtcNow, start, end)
-    {
-    }
+    public string OriginEndString { get; set; }
 
-    public Period(TimeSpan start, TimeSpan end)
-    {
-        StartDateTime = DateTime.ParseExact($"{start.Hours:00}:{start.Minutes:00}", "HH:mm", new DateTimeFormatInfo());
-        EndDateTime = DateTime.ParseExact($"{end.Hours:00}:{end.Minutes:00}", "HH:mm", new DateTimeFormatInfo());
+    public string OriginStartString { get; set; }
 
-        StartTimeSpan = start;
-        EndTimeSpan = end;
-    }
+    public DateTime BaseDate { get; set; }
 
     public TimeSpan EndTimeSpan { get; }
 
@@ -50,13 +39,18 @@ public class Period
     {
         if (IsTimeOverlap(another))
         {
-            var start = StartTimeSpan > another.StartTimeSpan ? StartDateTime : another.StartDateTime;
-            var end = EndTimeSpan < another.EndTimeSpan ? EndDateTime : another.EndDateTime;
+            var start = StartTimeSpan > another.StartTimeSpan ? OriginStartString : another.OriginStartString;
+            var end = EndTimeSpan < another.EndTimeSpan ? OriginEndString : another.OriginEndString;
 
-            return new Period(start, end);
+            return new Period(BaseDate, start, end);
         }
 
         return default;
+    }
+
+    private static DateTime DateTimeParseExact(DateTime date, string start)
+    {
+        return DateTime.ParseExact($"{date:yyyy/MM/dd} {start}", "yyyy/MM/dd HH:mm", new DateTimeFormatInfo());
     }
 
     private bool IsTimeOverlap(Period another)
