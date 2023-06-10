@@ -14,6 +14,10 @@ public class PeriodTests
 
         period.Start.Should().Be(new DateTime(2023, 06, 01, 01, 00, 00));
         period.End.Should().Be(new DateTime(2023, 06, 01, 02, 00, 00));
+
+        period.OriginStart.Should().Be("01:00");
+        period.OriginEnd.Should().Be("02:00");
+        period.BaseDate.Should().Be(baseDate);
     }
 
     [Fact]
@@ -24,6 +28,10 @@ public class PeriodTests
 
         period.Start.Should().Be(new DateTime(2023, 06, 01, 23, 00, 00));
         period.End.Should().Be(new DateTime(2023, 06, 02, 00, 00, 00));
+
+        period.OriginStart.Should().Be("23:00");
+        period.OriginEnd.Should().Be("00:00");
+        period.BaseDate.Should().Be(baseDate);
     }
 
     [Fact]
@@ -34,6 +42,10 @@ public class PeriodTests
 
         period.Start.Should().Be(new DateTime(2023, 06, 01, 00, 00, 00));
         period.End.Should().Be(new DateTime(2023, 06, 01, 01, 00, 00));
+
+        period.OriginStart.Should().Be("00:00");
+        period.OriginEnd.Should().Be("01:00");
+        period.BaseDate.Should().Be(baseDate);
     }
 
     [Fact]
@@ -45,6 +57,7 @@ public class PeriodTests
         var overlapPeriod = period.OverlapPeriod(new Period(baseDate, "04:00", "06:00"));
 
         overlapPeriod.Start.Should().Be(new DateTime(2023, 06, 01, 05, 00, 00));
+        overlapPeriod.End.Should().Be(new DateTime(2023, 06, 01, 06, 00, 00));
     }
 
     [Fact]
@@ -109,5 +122,20 @@ public class PeriodTests
         var period = new Period(baseDate, "23:00", "00:00");
 
         period.IsCrossDay.Should().BeFalse();
+    }
+
+    [Fact]
+    public void ctor_2_datetime()
+    {
+        var start = new DateTime(2023, 06, 01, 22, 00, 00);
+        var end = new DateTime(2023, 06, 02, 02, 00, 00);
+        var period = new Period(start, end);
+
+        period.Start.Should().Be(start);
+        period.End.Should().Be(end);
+
+        period.OriginStart.Should().Be("22:00");
+        period.OriginEnd.Should().Be("02:00");
+        period.BaseDate.Should().Be(start);
     }
 }

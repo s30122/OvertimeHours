@@ -10,10 +10,20 @@ public class Period
         OriginStart = start;
         OriginEnd = end;
 
-        Start = DateTimeParseExact(baseDate, start);
-
         var endDate = end == "00:00" ? baseDate.AddDays(1) : baseDate;
+
+        Start = DateTimeParseExact(baseDate, start);
         End = DateTimeParseExact(endDate, end);
+    }
+
+    public Period(DateTime start, DateTime end)
+    {
+        BaseDate = start;
+        OriginStart = start.ToString("HH:mm");
+        OriginEnd = end.ToString("HH:mm");
+        
+        Start = start;
+        End = end;
     }
 
     public DateTime BaseDate { get; set; }

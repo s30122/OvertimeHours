@@ -10,9 +10,8 @@ public class OvertimePeriodSettingsTests
     [Fact]
     public void ctor_1_setting()
     {
-        var startDateTime = new DateTime(2023, 06, 01);
-
-        var overtimePeriodSettings = new OvertimePeriodSettings(new Period(startDateTime, "01:00", "02:00"));
+        var baseDate = new DateTime(2023, 06, 01);
+        var overtimePeriodSettings = new OvertimePeriodSettings(new Period(baseDate, "01:00", "02:00"));
 
         overtimePeriodSettings.Count.Should().Be(1);
     }
@@ -20,8 +19,8 @@ public class OvertimePeriodSettingsTests
     [Fact]
     public void ctor_1_setting_cross_day()
     {
-        var startDateTime = new DateTime(2023, 06, 01);
-        var overtimePeriodSettings = new OvertimePeriodSettings(new Period(startDateTime, "23:00", "02:00"));
+        var baseDate = new DateTime(2023, 06, 01);
+        var overtimePeriodSettings = new OvertimePeriodSettings(new Period(baseDate, "23:00", "02:00"));
 
         overtimePeriodSettings.Count.Should().Be(2);
 
@@ -37,10 +36,10 @@ public class OvertimePeriodSettingsTests
     [Fact]
     public void ctor_2_setting()
     {
-        var startDateTime = new DateTime(2023, 06, 01);
+        var baseDate = new DateTime(2023, 06, 01);
 
-        var overtimePeriodSettings = new OvertimePeriodSettings(new Period(startDateTime, "06:00", "17:00"),
-                                                                new Period(startDateTime, "17:00", "06:00"));
+        var overtimePeriodSettings = new OvertimePeriodSettings(new Period(baseDate, "06:00", "17:00"),
+                                                                new Period(baseDate, "17:00", "06:00"));
 
         overtimePeriodSettings.Count.Should().Be(3);
 
@@ -60,14 +59,16 @@ public class OvertimePeriodSettingsTests
     [Fact(Skip = "skip")]
     public void split_overlap_1_period()
     {
-        var startDateTime = new DateTime(2024, 06, 01);
+        var baseDate = new DateTime(2023, 06, 01);
 
-        var overtimePeriodSettings = new OvertimePeriodSettings(new Period(startDateTime, "06:00", "22:00"),
-                                                                new Period(startDateTime, "22:00", "06:00"));
+        var overtimePeriodSettings = new OvertimePeriodSettings(new Period(baseDate, "06:00", "17:00"),
+                                                                new Period(baseDate, "17:00", "06:00"));
 
-        //
-        // var overTimePeriod = new Period(new DateTime(2023, 10, 08, 18, 00, 00),
-        //                                 new DateTime(2023, 10, 08, 20, 00, 00));
+        var overtimeStart = new DateTime(2023, 10, 08, 18, 00, 00);
+
+        var overtimeEnd = new DateTime(2023, 10, 08, 20, 00, 00);
+
+        var overTimePeriod = new Period(overtimeStart, overtimeEnd);
         //
         // var realOvertimePeriods = overtimePeriodSettings.SplitPeriod(overTimePeriod).ToList();
         //
