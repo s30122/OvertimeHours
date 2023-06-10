@@ -21,14 +21,10 @@ public class Period
         StartTimeSpan = TimeSpan.Parse(start);
         EndTimeSpan = TimeSpan.Parse(end);
     }
-    
-    public Period(string start, string end)
-    {
-        StartDateTime = DateTime.ParseExact($"{start}", "HH:mm", new DateTimeFormatInfo());
-        EndDateTime = DateTime.ParseExact($"{end}", "HH:mm", new DateTimeFormatInfo());
 
-        StartTimeSpan = TimeSpan.Parse(start);
-        EndTimeSpan = TimeSpan.Parse(end);
+    public Period(string start, string end)
+        : this(DateTime.UtcNow, start, end)
+    {
     }
 
     public Period(TimeSpan start, TimeSpan end)
