@@ -139,11 +139,12 @@ public class OvertimePeriodSettingsTests
         var overTimePeriod = new Period(overtimeStart, overtimeEnd);
 
         var overTimePeriods = overtimePeriodSettings.SplitPeriod(overTimePeriod).ToList();
+        var firstSettingEnd = new DateTime(2023, 06, 01, 17, 00, 00);
 
         overTimePeriods.Should().BeEquivalentTo(new List<Period>
         {
-            new(overtimeStart, new DateTime(2023, 06, 01, 17, 00, 00)),
-            new(new DateTime(2023, 06, 01, 17, 00, 00, 00), overtimeEnd),
+            new(overtimeStart, firstSettingEnd),
+            new(firstSettingEnd, overtimeEnd),
         }, options => options.Excluding(a => a.BaseDate));
     }
 
@@ -171,11 +172,12 @@ public class OvertimePeriodSettingsTests
         var overTimePeriods = overtimePeriodSettings.SplitPeriod(overTimePeriod).ToList();
 
         var crossDay = new DateTime(2023, 06, 02, 00, 00, 00);
+        var firstSettingEnd = new DateTime(2023, 06, 01, 17, 00, 00);
 
         overTimePeriods.Should().BeEquivalentTo(new List<Period>
         {
-            new(overtimeStart, new DateTime(2023, 06, 01, 17, 00, 00)),
-            new(new DateTime(2023, 06, 01, 17, 00, 00, 00), crossDay),
+            new(overtimeStart, firstSettingEnd),
+            new(firstSettingEnd, crossDay),
             new(crossDay, overtimeEnd)
         }, options => options.Excluding(a => a.BaseDate));
     }
