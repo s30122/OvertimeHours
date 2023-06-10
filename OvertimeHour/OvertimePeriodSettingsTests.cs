@@ -79,8 +79,6 @@ public class OvertimePeriodSettingsTests
 
         var overTimePeriods = overtimePeriodSettings.SplitPeriod(overTimePeriod).ToList();
 
-        overTimePeriods.Count.Should().Be(1);
-
         overTimePeriods.Should().BeEquivalentTo(new List<Period>
         {
             new(overtimeStart, overtimeEnd)
@@ -109,8 +107,6 @@ public class OvertimePeriodSettingsTests
         var overTimePeriod = new Period(overtimeStart, overtimeEnd);
 
         var overTimePeriods = overtimePeriodSettings.SplitPeriod(overTimePeriod).ToList();
-
-        overTimePeriods.Count.Should().Be(2);
 
         var crossDay = new DateTime(2023, 06, 02, 00, 00, 00);
 
