@@ -8,8 +8,8 @@ public class OvertimePeriodSettings : List<Period>
         {
             if (period.IsCrossDay)
             {
-                Add(new Period(period.BaseDate, period.OriginStartString, "00:00"));
-                Add(new Period(period.BaseDate.AddDays(1), "00:00", period.OriginEndString));
+                Add(new Period(period.BaseDate, period.OriginStart, "00:00"));
+                Add(new Period(period.BaseDate.AddDays(1), "00:00", period.OriginEnd));
             }
             else
             {

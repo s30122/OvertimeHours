@@ -1,43 +1,38 @@
+using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 
 namespace OvertimeHour;
 
+[SuppressMessage("ReSharper", "InconsistentNaming")]
 public class PeriodTests
 {
     [Fact]
-    public void ctor_2_string_and_overtime_startDateTime()
+    public void ctor()
     {
-        var startDateTime = new DateTime(2023, 06, 01);
+        var baseDate = new DateTime(2023, 06, 01);
+        var period = new Period(baseDate, "01:00", "02:00");
 
-        var period = new Period(startDateTime, "01:00", "02:00");
-
-        period.StartTimeSpan.Should().Be(TimeSpan.Parse("01:00"));
-        period.EndTimeSpan.Should().Be(TimeSpan.Parse("02:00"));
-        period.StartDateTime.Should().Be(new DateTime(2023, 06, 01, 01, 00, 00));
-        period.EndDateTime.Should().Be(new DateTime(2023, 06, 01, 02, 00, 00));
+        period.Start.Should().Be(new DateTime(2023, 06, 01, 01, 00, 00));
+        period.End.Should().Be(new DateTime(2023, 06, 01, 02, 00, 00));
     }
 
     [Fact]
     public void end_date_is_0000()
     {
-        var startDateTime = new DateTime(2023, 06, 01);
-        var period = new Period(startDateTime, "23:00", "00:00");
+        var baseDate = new DateTime(2023, 06, 01);
+        var period = new Period(baseDate, "23:00", "00:00");
 
-        period.StartTimeSpan.Should().Be(TimeSpan.Parse("23:00"));
-        period.EndTimeSpan.Should().Be(TimeSpan.Parse("00:00"));
-        period.StartDateTime.Should().Be(new DateTime(2023, 06, 01, 23, 00, 00));
-        period.EndDateTime.Should().Be(new DateTime(2023, 06, 02, 00, 00, 00));
+        period.Start.Should().Be(new DateTime(2023, 06, 01, 23, 00, 00));
+        period.End.Should().Be(new DateTime(2023, 06, 02, 00, 00, 00));
     }
 
     [Fact]
     public void start_date_is_0000()
     {
-        var startDateTime = new DateTime(2023, 06, 01);
-        var period = new Period(startDateTime, "00:00", "01:00");
+        var baseDate = new DateTime(2023, 06, 01);
+        var period = new Period(baseDate, "00:00", "01:00");
 
-        period.StartTimeSpan.Should().Be(TimeSpan.Parse("00:00"));
-        period.EndTimeSpan.Should().Be(TimeSpan.Parse("01:00"));
-        period.StartDateTime.Should().Be(new DateTime(2023, 06, 01, 00, 00, 00));
-        period.EndDateTime.Should().Be(new DateTime(2023, 06, 01, 01, 00, 00));
+        period.Start.Should().Be(new DateTime(2023, 06, 01, 00, 00, 00));
+        period.End.Should().Be(new DateTime(2023, 06, 01, 01, 00, 00));
     }
 }

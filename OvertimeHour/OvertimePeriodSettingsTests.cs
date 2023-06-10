@@ -21,22 +21,17 @@ public class OvertimePeriodSettingsTests
     public void ctor_split_cross_day()
     {
         var startDateTime = new DateTime(2023, 06, 01);
-
         var overtimePeriodSettings = new OvertimePeriodSettings(new Period(startDateTime, "23:00", "02:00"));
 
         overtimePeriodSettings.Count.Should().Be(2);
 
         var overtimePeriodSettingFirst = overtimePeriodSettings[0];
-        overtimePeriodSettingFirst.StartTimeSpan.Should().Be(TimeSpan.Parse("23:00"));
-        overtimePeriodSettingFirst.EndTimeSpan.Should().Be(TimeSpan.Parse("00:00"));
-        overtimePeriodSettingFirst.StartDateTime.Should().Be(new DateTime(2023, 06, 01, 23, 00, 00));
-        overtimePeriodSettingFirst.EndDateTime.Should().Be(new DateTime(2023, 06, 02, 00, 00, 00));
+        overtimePeriodSettingFirst.Start.Should().Be(new DateTime(2023, 06, 01, 23, 00, 00));
+        overtimePeriodSettingFirst.End.Should().Be(new DateTime(2023, 06, 02, 00, 00, 00));
 
-        // overtimePeriodSettings.Should().BeEquivalentTo(new List<Period>
-        // {
-        //     new(startDateTime, "23:00", "00:00"),
-        //     new(startDateTime.AddDays(1),"00:00", "02:00")
-        // });
+        var overtimePeriodSettingSecond = overtimePeriodSettings[1];
+        overtimePeriodSettingSecond.Start.Should().Be(new DateTime(2023, 06, 02, 00, 00, 00));
+        overtimePeriodSettingSecond.End.Should().Be(new DateTime(2023, 06, 02, 02, 00, 00));
     }
 
     [Fact(Skip = "skip")]

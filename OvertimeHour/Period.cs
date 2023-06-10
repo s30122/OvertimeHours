@@ -7,40 +7,33 @@ public class Period
     public Period(DateTime baseDate, string start, string end)
     {
         BaseDate = baseDate;
-        OriginStartString = start;
-        OriginEndString = end;
+        OriginStart = start;
+        OriginEnd = end;
 
-        StartDateTime = DateTimeParseExact(baseDate, start);
+        Start = DateTimeParseExact(baseDate, start);
 
         var endDate = end == "00:00" ? baseDate.AddDays(1) : baseDate;
-        EndDateTime = DateTimeParseExact(endDate, end);
-
-        StartTimeSpan = TimeSpan.Parse(start);
-        EndTimeSpan = TimeSpan.Parse(end);
+        End = DateTimeParseExact(endDate, end);
     }
-
-    public string OriginEndString { get; set; }
-
-    public string OriginStartString { get; set; }
 
     public DateTime BaseDate { get; set; }
 
-    public TimeSpan EndTimeSpan { get; }
+    public string OriginStart { get; set; }
 
-    public TimeSpan StartTimeSpan { get; }
+    public string OriginEnd { get; set; }
 
-    public DateTime StartDateTime { get; }
+    public DateTime Start { get; }
 
-    public DateTime EndDateTime { get; }
+    public DateTime End { get; }
 
-    public bool IsCrossDay => EndTimeSpan <= StartTimeSpan;
+    public bool IsCrossDay => End <= Start;
 
     public Period Overlap(Period another)
     {
         if (IsTimeOverlap(another))
         {
-            var start = StartTimeSpan > another.StartTimeSpan ? OriginStartString : another.OriginStartString;
-            var end = EndTimeSpan < another.EndTimeSpan ? OriginEndString : another.OriginEndString;
+            var start = Start > another.Start ? OriginStart : another.OriginStart;
+            var end = End < another.End ? OriginEnd : another.OriginEnd;
 
             return new Period(BaseDate, start, end);
         }
@@ -55,6 +48,6 @@ public class Period
 
     private bool IsTimeOverlap(Period another)
     {
-        return StartTimeSpan < another.EndTimeSpan && another.StartTimeSpan < EndTimeSpan;
+        return Start < another.End && another.Start < End;
     }
 }
