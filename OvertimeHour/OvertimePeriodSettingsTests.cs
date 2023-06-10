@@ -56,6 +56,16 @@ public class OvertimePeriodSettingsTests
         overtimePeriodSettingThird.End.Should().Be(new DateTime(2023, 06, 02, 06, 00, 00));
     }
 
+    /// <summary>
+    /// setting
+    /// 06 - 17, 17 - 06
+    ///
+    /// overtime
+    /// 18 - 20
+    ///
+    /// split
+    /// 18 - 20
+    /// </summary>
     [Fact]
     public void split_period_have_1_overlap_not_cross_day()
     {
@@ -77,6 +87,16 @@ public class OvertimePeriodSettingsTests
         });
     }
 
+    /// <summary>
+    /// setting
+    /// 06 - 17, 17 - 06
+    ///
+    /// overtime
+    /// 22 - 01
+    ///
+    /// split
+    /// 22 - 00, 00 - 01
+    /// </summary>
     [Fact]
     public void split_period_have_1_overlap_cross_day()
     {
