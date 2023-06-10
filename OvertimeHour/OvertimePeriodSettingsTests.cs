@@ -56,26 +56,24 @@ public class OvertimePeriodSettingsTests
         overtimePeriodSettingThird.End.Should().Be(new DateTime(2023, 06, 02, 06, 00, 00));
     }
 
-    [Fact(Skip = "skip")]
-    public void split_overlap_1_period()
+    [Fact]
+    public void split_period_have_1_overlap_not_cross_day()
     {
-        var baseDate = new DateTime(2023, 06, 01);
+        var overtimeStart = new DateTime(2023, 06, 01, 18, 00, 00);
+        var overtimeEnd = new DateTime(2023, 06, 01, 20, 00, 00);
 
-        var overtimePeriodSettings = new OvertimePeriodSettings(new Period(baseDate, "06:00", "17:00"),
-                                                                new Period(baseDate, "17:00", "06:00"));
-
-        var overtimeStart = new DateTime(2023, 10, 08, 18, 00, 00);
-
-        var overtimeEnd = new DateTime(2023, 10, 08, 20, 00, 00);
+        var overtimePeriodSettings = new OvertimePeriodSettings(new Period(overtimeStart, "06:00", "17:00"),
+                                                                new Period(overtimeStart, "17:00", "06:00"));
 
         var overTimePeriod = new Period(overtimeStart, overtimeEnd);
-        //
-        // var realOvertimePeriods = overtimePeriodSettings.SplitPeriod(overTimePeriod).ToList();
-        //
-        // realOvertimePeriods.Should().BeEquivalentTo(new List<Period>
-        // {
-        //     new("18:00", "20:00"),
-        // }, options => options.Excluding(a => a.StartDateTime)
-        //                      .Excluding(a => a.EndDateTime));
+
+        var overTimePeriods = overtimePeriodSettings.SplitPeriod(overTimePeriod).ToList();
+
+        overTimePeriods.Count.Should().Be(1);
+
+        overTimePeriods.Should().BeEquivalentTo(new List<Period>
+        {
+            new(overtimeStart, overtimeEnd)
+        });
     }
 }
