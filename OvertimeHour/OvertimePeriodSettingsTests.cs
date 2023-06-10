@@ -116,4 +116,67 @@ public class OvertimePeriodSettingsTests
             new(crossDay, overtimeEnd)
         }, options => options.Excluding(a => a.BaseDate));
     }
+
+    /// <summary>
+    /// setting
+    /// 06 - 17, 17 - 06
+    ///
+    /// overtime
+    /// 16 - 22
+    ///
+    /// split
+    /// 16 - 17, 17 - 22
+    /// </summary>
+    [Fact]
+    public void split_period_have_2_overlap_not_cross_day()
+    {
+        var overtimeStart = new DateTime(2023, 06, 01, 16, 00, 00);
+        var overtimeEnd = new DateTime(2023, 06, 01, 22, 00, 00);
+
+        var overtimePeriodSettings = new OvertimePeriodSettings(new Period(overtimeStart, "06:00", "17:00"),
+                                                                new Period(overtimeStart, "17:00", "06:00"));
+
+        var overTimePeriod = new Period(overtimeStart, overtimeEnd);
+
+        var overTimePeriods = overtimePeriodSettings.SplitPeriod(overTimePeriod).ToList();
+
+        overTimePeriods.Should().BeEquivalentTo(new List<Period>
+        {
+            new(overtimeStart, new DateTime(2023, 06, 01, 17, 00, 00)),
+            new(new DateTime(2023, 06, 01, 17, 00, 00, 00), overtimeEnd),
+        }, options => options.Excluding(a => a.BaseDate));
+    }
+
+    /// <summary>
+    /// setting
+    /// 06 - 17, 17 - 06
+    ///
+    /// overtime
+    /// 16 - 01
+    ///
+    /// split
+    /// 16 - 17, 17 - 00, 00 - 01
+    /// </summary>
+    [Fact]
+    public void split_period_have_2_overlap_cross_day()
+    {
+        var overtimeStart = new DateTime(2023, 06, 01, 16, 00, 00);
+        var overtimeEnd = new DateTime(2023, 06, 02, 01, 00, 00);
+
+        var overtimePeriodSettings = new OvertimePeriodSettings(new Period(overtimeStart, "06:00", "17:00"),
+                                                                new Period(overtimeStart, "17:00", "06:00"));
+
+        var overTimePeriod = new Period(overtimeStart, overtimeEnd);
+
+        var overTimePeriods = overtimePeriodSettings.SplitPeriod(overTimePeriod).ToList();
+
+        var crossDay = new DateTime(2023, 06, 02, 00, 00, 00);
+
+        overTimePeriods.Should().BeEquivalentTo(new List<Period>
+        {
+            new(overtimeStart, new DateTime(2023, 06, 01, 17, 00, 00)),
+            new(new DateTime(2023, 06, 01, 17, 00, 00, 00), crossDay),
+            new(crossDay, overtimeEnd)
+        }, options => options.Excluding(a => a.BaseDate));
+    }
 }
