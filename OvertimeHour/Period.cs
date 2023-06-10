@@ -12,8 +12,8 @@ public class Period
 
         var endDate = end == "00:00" ? baseDate.AddDays(1) : baseDate;
 
-        Start = DateTimeParseExact(baseDate, start);
-        End = DateTimeParseExact(endDate, end);
+        Start = ParseToDateTime(baseDate, start);
+        End = ParseToDateTime(endDate, end);
     }
 
     public Period(DateTime start, DateTime end)
@@ -51,7 +51,7 @@ public class Period
         return new Period(BaseDate, start, end);
     }
 
-    private static DateTime DateTimeParseExact(DateTime date, string start)
+    private static DateTime ParseToDateTime(DateTime date, string start)
     {
         return DateTime.ParseExact($"{date:yyyy/MM/dd} {start}", "yyyy/MM/dd HH:mm", new DateTimeFormatInfo());
     }

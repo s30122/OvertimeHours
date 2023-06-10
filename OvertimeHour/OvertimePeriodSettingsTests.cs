@@ -76,4 +76,28 @@ public class OvertimePeriodSettingsTests
             new(overtimeStart, overtimeEnd)
         });
     }
+
+    [Fact]
+    public void split_period_have_1_overlap_cross_day()
+    {
+        var overtimeStart = new DateTime(2023, 06, 01, 22, 00, 00);
+        var overtimeEnd = new DateTime(2023, 06, 02, 01, 00, 00);
+
+        var overtimePeriodSettings = new OvertimePeriodSettings(new Period(overtimeStart, "06:00", "17:00"),
+                                                                new Period(overtimeStart, "17:00", "06:00"));
+
+        var overTimePeriod = new Period(overtimeStart, overtimeEnd);
+
+        var overTimePeriods = overtimePeriodSettings.SplitPeriod(overTimePeriod).ToList();
+
+        overTimePeriods.Count.Should().Be(2);
+
+        var crossDay = new DateTime(2023, 06, 02, 00, 00, 00);
+
+        overTimePeriods.Should().BeEquivalentTo(new List<Period>
+        {
+            new(overtimeStart, crossDay),
+            new(crossDay, overtimeEnd)
+        }, options => options.Excluding(a => a.BaseDate));
+    }
 }
