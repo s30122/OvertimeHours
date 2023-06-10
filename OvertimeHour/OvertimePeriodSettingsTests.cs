@@ -7,6 +7,13 @@ namespace OvertimeHour;
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public class OvertimePeriodSettingsTests
 {
+    /// <summary>
+    /// setting
+    /// 01 - 02
+    ///
+    /// split setting
+    /// 01 - 02
+    /// </summary>
     [Fact]
     public void ctor_1_setting()
     {
@@ -16,6 +23,13 @@ public class OvertimePeriodSettingsTests
         overtimePeriodSettings.Count.Should().Be(1);
     }
 
+    /// <summary>
+    /// setting
+    /// 23 - 02
+    ///
+    /// split setting
+    /// 23 - 00, 00 - 02
+    /// </summary>
     [Fact]
     public void ctor_1_setting_cross_day()
     {
@@ -33,6 +47,13 @@ public class OvertimePeriodSettingsTests
         overtimePeriodSettingSecond.End.Should().Be(new DateTime(2023, 06, 02, 02, 00, 00));
     }
 
+    /// <summary>
+    /// setting
+    /// 06 - 17, 17 - 06
+    ///
+    /// split setting
+    /// 06 - 17, 17 - 00, 00 - 06
+    /// </summary>
     [Fact]
     public void ctor_2_setting()
     {
@@ -60,10 +81,13 @@ public class OvertimePeriodSettingsTests
     /// setting
     /// 06 - 17, 17 - 06
     ///
+    /// split setting
+    /// 06 - 17, 17 - 00, 00 - 06
+    ///
     /// overtime
     /// 18 - 20
     ///
-    /// split
+    /// split overtime
     /// 18 - 20
     /// </summary>
     [Fact]
@@ -89,10 +113,13 @@ public class OvertimePeriodSettingsTests
     /// setting
     /// 06 - 17, 17 - 06
     ///
+    /// split setting
+    /// 06 - 17, 17 - 00, 00 - 06
+    ///
     /// overtime
     /// 22 - 01
     ///
-    /// split
+    /// split overtime
     /// 22 - 00, 00 - 01
     /// </summary>
     [Fact]
@@ -121,10 +148,13 @@ public class OvertimePeriodSettingsTests
     /// setting
     /// 06 - 17, 17 - 06
     ///
+    /// split setting
+    /// 06 - 17, 17 - 00, 00 - 06
+    ///
     /// overtime
     /// 16 - 22
     ///
-    /// split
+    /// split overtime
     /// 16 - 17, 17 - 22
     /// </summary>
     [Fact]
@@ -152,10 +182,13 @@ public class OvertimePeriodSettingsTests
     /// setting
     /// 06 - 17, 17 - 06
     ///
+    /// split setting
+    /// 06 - 17, 17 - 00, 00 - 06
+    ///
     /// overtime
     /// 16 - 01
     ///
-    /// split
+    /// split overtime
     /// 16 - 17, 17 - 00, 00 - 01
     /// </summary>
     [Fact]
