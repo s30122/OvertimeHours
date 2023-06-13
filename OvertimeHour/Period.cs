@@ -4,26 +4,37 @@ namespace OvertimeHour;
 
 public class Period
 {
-    public Period(DateTime baseDate, string start, string end)
+    public Period(DateTime baseDate, string start, string end) : this(baseDate, TimeSpan.Parse(start),
+        TimeSpan.Parse(end))
     {
-        BaseDate = baseDate;
         OriginStart = start;
         OriginEnd = end;
 
-        var endDate = end == "00:00" ? baseDate.AddDays(1) : baseDate;
-
-        Start = ParseToDateTime(baseDate, start);
-        End = ParseToDateTime(endDate, end);
+        // var endDate = end == "00:00" ? baseDate.AddDays(1) : baseDate;
+        //
+        // Start = ParseToDateTime(baseDate, start);
+        // End = ParseToDateTime(endDate, end);
     }
 
     public Period(DateTime start, DateTime end)
     {
-        BaseDate = start;
+        BaseDate = start.Date;
         OriginStart = start.ToString("HH:mm");
         OriginEnd = end.ToString("HH:mm");
-        
+
         Start = start;
         End = end;
+    }
+
+    private Period(DateTime baseDate, TimeSpan start, TimeSpan end)
+    {
+        BaseDate = baseDate.Date;
+        Start = BaseDate.Add(start);
+        End = BaseDate.Add(end);
+        if (end < start)
+        {
+            End = End.AddDays(1);
+        }
     }
 
     public DateTime BaseDate { get; set; }
@@ -36,7 +47,8 @@ public class Period
 
     public DateTime End { get; }
 
-    public bool IsCrossDay => End <= Start;
+    // public bool IsCrossDay => End <= Start;
+    public bool IsCrossDay => End.Date != Start.Date && End > Start;
 
     public Period OverlapPeriod(Period another)
     {
